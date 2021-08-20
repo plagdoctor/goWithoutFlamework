@@ -15,20 +15,11 @@ type Post struct {
 
 var Db *sql.DB
 
-const (
-	// Initialize connection constants.
-	HOST     = "mydemoserver.postgres.database.azure.com"
-	DATABASE = "mypgsqldb"
-	USER     = "mylogin@mydemoserver"
-	PASSWORD = "<server_admin_password>"
-)
-
 // connect to the Db
-func Init() {
+func init() {
 	var err error
-	Db, err = sql.Open("postgres", "user=gwp dbname=gwp password=gwp sslmode=disable")
+	Db, err = sql.Open("postgres", "user=postgres dbname=gwp password=wlsdud0723 sslmode=disable")
 	if err != nil {
-		fmt.Println("dd")
 		panic(err)
 	}
 }
@@ -37,14 +28,12 @@ func Init() {
 func Posts(limit int) (posts []Post, err error) {
 	rows, err := Db.Query("select id, content, author from posts limit $1", limit)
 	if err != nil {
-		fmt.Println("dd=", err)
 		return
 	}
 	for rows.Next() {
 		post := Post{}
 		err = rows.Scan(&post.Id, &post.Content, &post.Author)
 		if err != nil {
-			fmt.Println("dd2=", err)
 			return
 		}
 		posts = append(posts, post)
@@ -91,7 +80,6 @@ func DeleteAll() (err error) {
 }
 
 func main() {
-	Init()
 	post := Post{Content: "Hello World!", Author: "Sau Sheong"}
 
 	// Create a post
